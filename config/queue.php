@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'database'),
+    'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -33,15 +33,6 @@ return [
 
         'sync' => [
             'driver' => 'sync',
-        ],
-
-        'database' => [
-            'driver' => 'database',
-            'connection' => env('DB_QUEUE_CONNECTION'),
-            'table' => env('DB_QUEUE_TABLE', 'jobs'),
-            'queue' => env('DB_QUEUE', 'default'),
-            'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
-            'after_commit' => false,
         ],
 
         'beanstalkd' => [
@@ -80,8 +71,8 @@ return [
         'failover' => [
             'driver' => 'failover',
             'connections' => [
-                'database',
                 'deferred',
+                'sync',
             ],
         ],
 
@@ -98,10 +89,7 @@ return [
     |
     */
 
-    'batching' => [
-        'database' => env('DB_CONNECTION', 'sqlite'),
-        'table' => 'job_batches',
-    ],
+    'batching' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -117,9 +105,9 @@ return [
     */
 
     'failed' => [
-        'driver' => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
-        'database' => env('DB_CONNECTION', 'sqlite'),
-        'table' => 'failed_jobs',
+        'driver' => env('QUEUE_FAILED_DRIVER', 'file'),
+        'path' => storage_path('framework/cache/failed-jobs.json'),
+        'limit' => 100,
     ],
 
 ];
